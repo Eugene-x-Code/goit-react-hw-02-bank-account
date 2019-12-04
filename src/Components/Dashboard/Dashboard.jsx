@@ -11,6 +11,7 @@ class Dashboard extends Component {
   state = {
     transactions: [],
     balance: 0,
+    input: 0,
   };
 
   componentDidMount() {
@@ -35,9 +36,13 @@ class Dashboard extends Component {
     }
   }
 
+  handleInput = query => {
+    this.setState({ input: query });
+  };
+
   createTransaction = ({ target }) => {
-    const { balance } = this.state;
-    const inputVal = Number(target.parentNode.querySelector('input').value);
+    const { balance, input } = this.state;
+    const inputVal = Number(input);
     target.parentNode.reset();
     if (checkCorrectInput(inputVal, target.name, balance)) {
       const transaction = {
@@ -70,12 +75,15 @@ class Dashboard extends Component {
   render() {
     const { transactions, balance } = this.state;
     return (
-      <>
-        <Controls createTransaction={this.createTransaction} />
+      <div>
+        <Controls
+          createTransaction={this.createTransaction}
+          handleInput={this.handleInput}
+        />
         <Balance transactions={transactions} balance={balance} />
         <TaransactionHistory transactions={transactions} />
         <ToastContainer />
-      </>
+      </div>
     );
   }
 }
